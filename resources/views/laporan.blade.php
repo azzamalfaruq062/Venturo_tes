@@ -18,26 +18,26 @@
               @csrf
               @method('POST')
               <div class="row">
-                <div class="col-6">
+                <div class="col-3">
                   <select class="form-control" name="tahun" >
                       <option value="2021">2021</option>
                       <option value="2022">2022</option>
                   </select>
                 </div>
-                <input type="submit" value="Tampilkan" class="btn btn-primary col-3">
+                <input type="submit" value="Tampilkan" class="btn btn-primary col-1">
               </div>
             </form>
 
             @isset($men)     
               <div>
-                <table class="table table-hover">
+                <table class="table table-hover mt-3">
                   <tr>
-                    <th rowspan="3">Menu</th>
+                    <th rowspan="3" class="table-dark text-center text-light">Menu</th>
                   </tr>
                   <tr>
-                    <th colspan="13">Periode Pada {{$tahun}}</th>
+                    <th colspan="13" class="table-dark text-center text-light">Periode Pada {{$tahun}}</th>
                   </tr>
-                  <tr>
+                  <tr class="text-light table-dark">
                     <th>Jan</th>
                     <th>Feb</th>
                     <th>Mar</th>
@@ -53,45 +53,43 @@
                     <th>Total</th>
                   </tr>
                   <tr class="table-dark">
-                    <td>Makanan</td>
+                    <td colspan="14" class="text-center">Makanan</td>
                   </tr>
                   @foreach ($men as $m)
-                    @if ($m['kategori'] == 'makanan')
-                  <tr>
-                      <td>{{$m['menu']}}</td>
-                      {{-- Perbulan Minuman--}}
-                      @for ($i = 1; $i <= 12; $i++)                          
-                        <?php 
-                        $total = 0;
-                        $total_permenu = 0;
-                        ?>
-                        @foreach ($laporan_perbulan as $l)
-                          @if ($l['menu'] == $m['menu'])
-                            <?php
-                            $total_permenu += $l['total']
+                    @if($m['kategori'] == 'makanan')
+                      <tr>
+                          <td>{{$m['menu']}}</td>
+                          {{-- Perbulan permenu perbulan Makanan--}}
+                          @for ($i = 1; $i <= 12; $i++)                          
+                            <?php 
+                              $total = 0;
+                              $total_permenu = 0;
+                              $total_perbulan = 0;
                             ?>
-                          @endif
-                          @if ($l['menu'] == $m['menu'] && $l['bulan'] == $i)
-                            <?php
-                            $total += $l['total']
-                            ?>
-                          @endif
-                        @endforeach
-                        <td>{{$total}}</td>
-                      @endfor
-                        <td>{{$total_permenu}}</td>
-                  </tr>
+                            @foreach ($laporan_perbulan as $l)
+                              @if ($l['menu'] == $m['menu'])
+                                <?php $total_permenu += $l['total'] ?>
+                                  @if ($l['bulan'] == $i)
+                                    <?php $total += $l['total'] ?>
+                                  @endif
+                              @endif
+
+                            @endforeach
+                          <td>{{$total}}</td>
+                          @endfor
+                          <td>{{$total_permenu}}</td>
+                      </tr>
                     @endif  
                   @endforeach
                   {{-- Minuman --}}
                   <tr class="table-dark">
-                    <td>Minuman</td>
+                    <td colspan="14" class="text-center">Minuman</td>
                   </tr>
                   @foreach ($men as $m)
                     @if ($m['kategori'] == 'minuman')
                       <tr>
                           <td>{{$m['menu']}}</td>
-                          {{-- Perbulan Minuman--}}
+                          {{-- total permenu perbulan Minuman--}}
                           @for ($i = 1; $i <= 12; $i++)                          
                             <?php
                             $total = 0;
@@ -117,19 +115,23 @@
                   @endforeach
                       <tr>
                         <th>Total Perbulan</th>
-                        <?php $total=0; $coba = [];?>
-                        @foreach ($laporan_perbulan as $b) 
-                        @for ($i = 1; $i <= 12; $i++)                            
-                          @if ($b['bulan'] == $i)
-                            <?php
-                              $total += $b['total'];
-                            ?>
-                          @endif
-                          {{-- <?php
-                          ?> --}}
-                          @endfor
-                          <td>{{$total}}</td>
-                          @endforeach
+                        <td>{{$januari}}</td>
+                        <td>{{$februari}}</td>
+                        <td>{{$maret}}</td>
+                        <td>{{$april}}</td>
+                        <td>{{$mei}}</td>
+                        <td>{{$juni}}</td>
+                        <td>{{$juli}}</td>
+                        <td>{{$agustus}}</td>
+                        <td>{{$september}}</td>
+                        <td>{{$oktober}}</td>
+                        <td>{{$november}}</td>
+                        <td>{{$desember}}</td>
+                        <?php $total_semua = 0; ?>
+                        @foreach ($laporan_perbulan as $l)
+                          <?php $total_semua += $l['total'] ?>
+                        @endforeach
+                        <td>{{$total_semua}}</td>
                       </tr>
                 </table>
               </div>

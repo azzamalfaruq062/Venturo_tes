@@ -38,35 +38,33 @@ class TestController extends Controller
             ];
         }
 
-        // for($i = 1; $i <= 12; $i++){
-        //     $total_perbulan[] = [
-        //         'bulan' => $i,
-        //         'total' => 0,
-        //     ];
-        // }
 
-        // foreach ($laporan_pertahun as $t) {           
-        //     $total_perbulan[] = [
-        //         'bulan' => date('m', strtotime($t['tanggal'])),
-        //         'total' => $t['total'],
-        //     ];
-        // }
+        foreach ($laporan_pertahun as $l) {
+            for ($i = 1; $i <= 12; $i++) {
+                $total[$i] = 0;
+            }
+        }
 
-        // foreach ($total_perbulan as $b) {
-        //     foreach ($laporan_pertahun as $t) {
-        //         // echo $b['bulan']."<br>";
-        //         $bulan = date("n", strtotime($t['tanggal']));
-        //         if($bulan == $b['bulan']){
-        //             $hasil = $b['total']+= $t['total'];
-        //         }
-        //     }
-        // }
-        // dd($total_perbulan);
-        // echo $tot."<br>";
-        // die();
-        // dd($total_perbulan);
-        // $total_perbulan = 0; 
+        foreach ($laporan_pertahun as $p) {
+            $bulan = date('n', strtotime($p['tanggal']));
+            $total[$bulan] += $p['total'];
+        }
 
-        return view('laporan', compact('laporan_perbulan', 'men','tahun'));        
+            $januari = $total[1];
+            $februari = $total[2];
+            $maret = $total[3];
+            $april = $total[4];
+            $mei = $total[5];
+            $juni = $total[6];
+            $juli = $total[7];
+            $agustus = $total[8];
+            $september = $total[9];
+            $oktober = $total[10];
+            $november = $total[11];
+            $desember = $total[12];
+
+        // $januari = $total[1];
+
+        return view('laporan', compact('laporan_perbulan', 'men','tahun', 'januari', 'februari', 'maret','april','mei','juni','juli','agustus','september', 'oktober', 'november', 'desember'));        
     }
 }
