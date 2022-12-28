@@ -7,12 +7,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
   </head>
   <body>
-    <h1>Venturo</h1>
+    <h1 class="text-center">Venturo</h1>
 
-    <div class="card">
-        <div class="card-header">
-          Laporan
-        </div>
+    <div class="card m-5">
+        <div class="card-header">Laporan</div>
         <div class="card-body">
             <form action="{{url('laporan')}}" method="POST">
               @csrf
@@ -20,6 +18,7 @@
               <div class="row">
                 <div class="col-3">
                   <select class="form-control" name="tahun" >
+                      <option value="{{$tahun}}" selected>{{$tahun}}</option>
                       <option value="2021">2021</option>
                       <option value="2022">2022</option>
                   </select>
@@ -27,7 +26,6 @@
                 <input type="submit" value="Tampilkan" class="btn btn-primary col-1">
               </div>
             </form>
-
             @isset($men)     
               <div>
                 <table class="table table-hover mt-3">
@@ -55,32 +53,65 @@
                   <tr class="table-dark">
                     <td colspan="14" class="text-center">Makanan</td>
                   </tr>
+
+                  @php
+                  $az = 0;
+                  @endphp
+
                   @foreach ($men as $m)
+                    {{-- {{$az++}} --}}
                     @if($m['kategori'] == 'makanan')
-                      <tr>
+                      <tr id="index_{{$az++}}">
                           <td>{{$m['menu']}}</td>
-                          {{-- Perbulan permenu perbulan Makanan--}}
+                          {{-- Perbulan, permenu Makanan--}}
                           @for ($i = 1; $i <= 12; $i++)                          
-                            <?php 
-                              $total = 0;
-                              $total_permenu = 0;
-                              $total_perbulan = 0;
-                            ?>
+                            <?php $total = 0; $total_permenu = 0; ?>
                             @foreach ($laporan_perbulan as $l)
+                              <?php $menuu = $m['menu'] ?>
                               @if ($l['menu'] == $m['menu'])
                                 <?php $total_permenu += $l['total'] ?>
                                   @if ($l['bulan'] == $i)
                                     <?php $total += $l['total'] ?>
                                   @endif
                               @endif
+                              @endforeach
+                              {{-- Modal --}}
+                              <div class="modal fade" id="index_{{$i}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="menu" aria-hidden="true">
+                                <div class="modal-dialog">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h1 class="modal-title fs-5" id="staticBackdropLabel">Laporan Penjualan</h1>
+                                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                      @foreach ($laporan_perbulan as $lap)
+                                          @if ($lap['bulan'] == $i)
+                                          <ul class="list-group list-group-flush">
+                                            <li class="list-group-item">
+                                                {{$lap['tanggal'] }} :
+                                                {{ number_format($lap['total'], 0, ',', '.') }}
+                                            </li>
+                                          </ul>
+                                          @endif
+                                      @endforeach
+                                      <br>Total : {{number_format($total)}}<br>Bulan : 0{{$i}}
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              {{-- And Modal --}}
 
-                            @endforeach
-                          <td>{{$total}}</td>
+                            <td data-bs-toggle="modal" data-bs-target="#index_{{$i}}"> {{number_format($total)}}</td>
                           @endfor
-                          <td>{{$total_permenu}}</td>
+                          <td>{{number_format($total_permenu)}}</td>
                       </tr>
-                    @endif  
+                    @endif 
+
                   @endforeach
+
                   {{-- Minuman --}}
                   <tr class="table-dark">
                     <td colspan="14" class="text-center">Minuman</td>
@@ -89,27 +120,48 @@
                     @if ($m['kategori'] == 'minuman')
                       <tr>
                           <td>{{$m['menu']}}</td>
-                          {{-- total permenu perbulan Minuman--}}
                           @for ($i = 1; $i <= 12; $i++)                          
-                            <?php
-                            $total = 0;
-                            $total_permenu = 0;
-                            ?>
+                            <?php $total = 0; $total_permenu = 0; ?>
                             @foreach ($laporan_perbulan as $l) 
                               @if ($l['menu'] == $m['menu'])
-                                <?php
-                                $total_permenu += $l['total']
-                                ?>
-                              @endif
-                              @if ($l['menu'] == $m['menu'] && $l['bulan'] == $i)
-                                <?php
-                                $total += $l['total']
-                                ?>
+                                <?php $total_permenu += $l['total'] ?>
+                                  @if ($l['bulan'] == $i)
+                                    <?php $total += $l['total'] ?>
+                                  @endif
                               @endif
                             @endforeach
-                            <td>{{$total}}</td>
+                              {{-- Modal --}}
+                              <div class="modal fade" id="minum_{{$i}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="menu" aria-hidden="true">
+                                <div class="modal-dialog">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h1 class="modal-title fs-5" id="staticBackdropLabel">Laporan Penjualan</h1>
+                                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                      @foreach ($laporan_perbulan as $lap)
+                                          @if ($lap['bulan'] == $i)
+                                          <ul class="list-group list-group-flush">
+                                            <li class="list-group-item">
+                                                {{$lap['tanggal'] }} :
+                                                {{ number_format($lap['total'], 0, ',', '.') }}
+                                            </li>
+                                          </ul>
+                                          @endif
+                                      @endforeach
+                                      <br>Total : {{number_format($total)}}<br>Bulan : 0{{$i}}
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              {{-- And Modal --}}
+                          <td data-bs-toggle="modal" data-bs-target="#minum_{{$i}}"> {{number_format($total)}}</td>
+                          {{-- <td>{{$total}}</td> --}}
                           @endfor
-                            <td>{{$total_permenu}}</td>
+                          <td>{{number_format($total_permenu)}}</td>
                       </tr>
                     @endif  
                   @endforeach

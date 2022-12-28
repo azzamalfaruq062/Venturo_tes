@@ -12,14 +12,6 @@ class TestController extends Controller
     {
         return view('laporan');
     }
-    public function menu()
-    {
-        $menu = Http::get('http://tes-web.landa.id/intermediate/menu');
-        $men = $menu->json();
-
-        return view('laporan', compact('men'));
-        
-    }
 
     public function laporan(Request $request)
     {
@@ -30,8 +22,21 @@ class TestController extends Controller
         $menu = Http::get('http://tes-web.landa.id/intermediate/menu');
         $men = $menu->json();
 
+
+        // foreach ($men as $m) {    
+        //     for ($i=0; $i < 10; $i++) { 
+        //         $coba[$i] = $i;
+        //     }       
+        // }
+
+        // foreach ($men as $m) {
+        //     $menus[$i] = 0; 
+        // }
+
+
         foreach ($laporan_pertahun as $l) {           
             $laporan_perbulan[] = [
+                'tanggal' => $l['tanggal'],
                 'bulan' => date('m', strtotime($l['tanggal'])),
                 'menu' => $l['menu'],
                 'total' => $l['total'],
@@ -50,20 +55,20 @@ class TestController extends Controller
             $total[$bulan] += $p['total'];
         }
 
-            $januari = $total[1];
-            $februari = $total[2];
-            $maret = $total[3];
-            $april = $total[4];
-            $mei = $total[5];
-            $juni = $total[6];
-            $juli = $total[7];
-            $agustus = $total[8];
-            $september = $total[9];
-            $oktober = $total[10];
-            $november = $total[11];
-            $desember = $total[12];
+        $januari = $total[1];
+        $februari = $total[2];
+        $maret = $total[3];
+        $april = $total[4];
+        $mei = $total[5];
+        $juni = $total[6];
+        $juli = $total[7];
+        $agustus = $total[8];
+        $september = $total[9];
+        $oktober = $total[10];
+        $november = $total[11];
+        $desember = $total[12];
 
-        // $januari = $total[1];
+        // dd($men[0]);
 
         return view('laporan', compact('laporan_perbulan', 'men','tahun', 'januari', 'februari', 'maret','april','mei','juni','juli','agustus','september', 'oktober', 'november', 'desember'));        
     }

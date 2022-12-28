@@ -18,6 +18,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [TestController::class, 'index']);
 Route::post('/laporan', [TestController::class, 'laporan'])->name('laporan');
-Route::get('/menu', [TestController::class, 'menu'])->name('menu');
+// Route::get('/menu', [TestController::class, 'menu'])->name('menu');
 
 
