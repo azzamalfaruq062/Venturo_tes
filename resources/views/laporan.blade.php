@@ -85,7 +85,7 @@
                                 <div class="modal-dialog">
                                   <div class="modal-content">
                                     <div class="modal-header">
-                                      <h1 class="modal-title fs-5" id="staticBackdropLabel">Laporan Penjualan</h1>
+                                      <h1 class="modal-title fs-5" id="staticBackdropLabel">Laporan Penjualan {{$menu}}</h1>
                                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
@@ -142,7 +142,7 @@
                                 <div class="modal-dialog">
                                   <div class="modal-content">
                                     <div class="modal-header">
-                                      <h1 class="modal-title fs-5" id="staticBackdropLabel">Laporan Penjualan</h1>
+                                      <h1 class="modal-title fs-5" id="staticBackdropLabel">Laporan Penjualan {{$menu}}</h1>
                                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
@@ -150,7 +150,7 @@
                                           @if ($lap['bulan'] == $i && $lap['menu'] == $menu)
                                           <ul class="list-group list-group-flush">
                                             <li class="list-group-item">
-                                                {{$lap['tanggal'] }} :
+                                                {{$lap['tanggal'] }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                 {{ number_format($lap['total'], 0, ',', '.') }}
                                             </li>
                                           </ul>
