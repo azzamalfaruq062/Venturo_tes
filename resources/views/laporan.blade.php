@@ -60,6 +60,7 @@
 
                   @foreach ($men as $m)
                     {{-- {{$az++}} --}}
+                    {{-- Masih blom sempurna kesusahan dalam akses per row karena menu tidak ada id dan kesusahan nambahin id dalam json menu --}}
                     @if($m['kategori'] == 'makanan')
                       <tr id="index_{{$az++}}">
                           <td>{{$m['menu']}}</td>
