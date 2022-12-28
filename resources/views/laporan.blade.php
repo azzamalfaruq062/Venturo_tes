@@ -18,7 +18,9 @@
               <div class="row">
                 <div class="col-3">
                   <select class="form-control" name="tahun" >
-                      <option value="{{$tahun}}" selected>{{$tahun}}</option>
+                      @isset($tahun)
+                        <option value="{{$tahun}}" selected>{{$tahun}}</option>
+                      @endisset
                       <option value="2021">2021</option>
                       <option value="2022">2022</option>
                   </select>
@@ -59,10 +61,12 @@
                   @endphp
 
                   @foreach ($men as $m)
+                    <?php $id = $az++; ?>
                     {{-- {{$az++}} --}}
                     {{-- Masih blom sempurna kesusahan dalam akses per row karena menu tidak ada id dan kesusahan nambahin id dalam json menu --}}
                     @if($m['kategori'] == 'makanan')
-                      <tr id="index_{{$az++}}">
+                      <tr>
+                        <?php $menu = $m['menu']; ?>
                           <td>{{$m['menu']}}</td>
                           {{-- Perbulan, permenu Makanan--}}
                           @for ($i = 1; $i <= 12; $i++)                          
@@ -77,7 +81,7 @@
                               @endif
                               @endforeach
                               {{-- Modal --}}
-                              <div class="modal fade" id="index_{{$i}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="menu" aria-hidden="true">
+                              <div class="modal fade" id="index_{{$i}}_{{$id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="menu" aria-hidden="true">
                                 <div class="modal-dialog">
                                   <div class="modal-content">
                                     <div class="modal-header">
@@ -86,7 +90,7 @@
                                     </div>
                                     <div class="modal-body">
                                       @foreach ($laporan_perbulan as $lap)
-                                          @if ($lap['bulan'] == $i)
+                                          @if ($lap['bulan'] == $i && $lap['menu'] == $menu)
                                           <ul class="list-group list-group-flush">
                                             <li class="list-group-item">
                                                 {{$lap['tanggal'] }} :
@@ -95,7 +99,7 @@
                                           </ul>
                                           @endif
                                       @endforeach
-                                      <br>Total : {{number_format($total)}}<br>Bulan : 0{{$i}}
+                                      {{$menu}}<br>Total : {{number_format($total)}}<br>Bulan : 0{{$i}}
                                     </div>
                                     <div class="modal-footer">
                                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -105,7 +109,7 @@
                               </div>
                               {{-- And Modal --}}
 
-                            <td data-bs-toggle="modal" data-bs-target="#index_{{$i}}"> {{number_format($total)}}</td>
+                            <td data-bs-toggle="modal" data-bs-target="#index_{{$i}}_{{$id}}"> {{number_format($total)}}</td>
                           @endfor
                           <td>{{number_format($total_permenu)}}</td>
                       </tr>
